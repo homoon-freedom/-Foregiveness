@@ -83,6 +83,13 @@
 
         .controls {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-row {
+            display: flex;
             justify-content: center;
             flex-wrap: wrap;
             gap: 10px;
@@ -203,21 +210,118 @@
             padding: 12px;
         }
 
+        /* --- 사용자 및 사건 설정 모달 (참고 이미지 스타일 반영) --- */
+        .settings-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .settings-content { transform: translateY(0); }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .settings-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .setting-group label {
+            display: block;
+            font-size: 0.95rem;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .settings-content input, .settings-content select {
+            flex: 1;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .settings-content select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 35px;
+        }
+
+        .btn-blue { background-color: #007bff; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-blue:hover { background-color: #0056b3; }
+
+        .btn-red { background-color: #ff3b30; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-red:hover { background-color: #d32f2f; }
+
+        .btn-orange { background-color: #ff9500; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-orange:hover { background-color: #e08500; }
+
+        .divider {
+            border: none;
+            border-top: 1px dashed #444;
+            margin: 20px 0;
+        }
+
+        .cloud-sync-btn {
+            width: 100%;
+            background-color: #4a4a4a;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+        .cloud-sync-btn:hover { background-color: #5a5a5a; }
+
+
         /* --- 이북(E-Book) 모달 --- */
         .ebook-content {
-            background-color: #fdf6e3; /* 종이 느낌의 배경색 */
-            color: #333; /* 잉크 색상 */
+            background-color: #fdf6e3;
+            color: #333;
             padding: 50px 40px;
             width: 90%;
             max-width: 650px;
             height: 80vh;
             border-radius: 4px 12px 12px 4px;
-            box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.6); /* 책의 제본선 그림자 */
+            box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.6);
             position: relative;
             overflow-y: auto;
             transform: scale(0.95);
             transition: transform 0.3s ease;
-            /* 명조체 기반으로 아날로그 책 느낌 부여 */
             font-family: 'Batang', 'Noto Serif KR', 'KoPub Batang', serif; 
         }
 
@@ -283,10 +387,17 @@
         <div class="script-text" id="scriptText"></div>
 
         <div class="controls">
-            <button id="prevBtn" disabled>이전</button>
-            <button id="playAudioBtn" class="btn-audio">▶ 오디오 재생</button>
-            <button id="recordBtn">✍️ 느낌 기록하기</button>
-            <button id="nextBtn">다음 단계</button>
+            <!-- 첫째줄: 이전, 오디오 재생, 다음 -->
+            <div class="control-row">
+                <button id="prevBtn" disabled>이전</button>
+                <button id="playAudioBtn" class="btn-audio">▶ 오디오 재생</button>
+                <button id="nextBtn">다음 단계</button>
+            </div>
+            <!-- 둘째줄: 느낌 기록하기, 설정 -->
+            <div class="control-row">
+                <button id="recordBtn">✍️ 느낌 기록하기</button>
+                <button id="openSettingsBtn">⚙️ 설정</button>
+            </div>
         </div>
     </div>
 
@@ -303,13 +414,64 @@
         </div>
     </div>
 
+    <!-- 사용자 및 사건 설정 모달 -->
+    <div id="settingsModal" class="modal">
+        <div class="settings-content">
+            <span class="close-btn" id="closeSettingsModalBtn">&times;</span>
+            <div class="settings-header">
+                <h2>⚙️ 설정</h2>
+            </div>
+
+            <!-- 1. 사용자 -->
+            <div class="setting-group">
+                <label>1. 사용자</label>
+                <div class="input-row">
+                    <input type="text" id="userInput" placeholder="이름">
+                    <button class="btn-blue" id="registerUserBtn">등록</button>
+                </div>
+                <div class="input-row">
+                    <select id="userSelect">
+                        <option value="">사용자를 선택하세요</option>
+                    </select>
+                    <button class="btn-red" id="deleteUserBtn">삭제</button>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- 2. 사건 -->
+            <div class="setting-group">
+                <label>2. 사건</label>
+                <div class="input-row">
+                    <input type="text" id="eventInput" placeholder="사건명">
+                    <button class="btn-blue" id="addEventBtn">추가</button>
+                </div>
+                <div class="input-row">
+                    <select id="eventSelect">
+                        <option value="">사건을 선택하세요</option>
+                    </select>
+                    <button class="btn-orange" id="editEventBtn">수정</button>
+                    <button class="btn-red" id="deleteEventBtn">삭제</button>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- 3. 클라우드에서 불러오기 -->
+            <div class="setting-group" style="margin-bottom: 0;">
+                <label>3. 클라우드에서 불러오기</label>
+                <button class="cloud-sync-btn" id="loadCloudBtn">불러오기(다른 기기 저장 내용)</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 이북(요약) 모달 -->
     <div id="ebookModal" class="modal">
         <div class="ebook-content">
             <span class="close-btn" id="closeEbookModalBtn">&times;</span>
             
             <div class="ebook-title-page">
-                <h1>나의 내면 정화 일지</h1>
+                <h1 id="ebookHeaderTitle">나의 내면 정화 일지</h1>
                 <p id="ebookDate"></p>
             </div>
 
@@ -324,13 +486,13 @@
             {
                 indicator: "0단계",
                 title: "고요함 속으로 들어가기",
-                script: "본격적인 정화의 시간을 갖기 전, 먼저 지금 이 순간으로 당신을 초대합니다.\n편안한 자세로 앉아, 가만히 눈을 감아보세요.\n이제 천천히, 코를 통해 깊게 숨을 들이마십니다. \n내 몸 안으로 맑은 공기가 들어오는 것을 느껴봅니다.\n그리고 입을 통해 천천히, 끝까지 숨을 내쉽니다.\n내쉴 때마다, 어깨의 긴장과 머릿속의 복잡한 생각들이 숨결을 타고 함께 빠져나갑니다.\n다시 한번 깊게 들이마시고... 길게 내쉽니다.\n외부로 향해 있던 나의 모든 감각과 에너지를, 이제 오롯이 내 안으로 거두어들입니다. \n당신은 지금 완벽하게 안전하며, 이 시간은 오직 당신 내면의 평화를 위한 시간입니다. \n준비가 되었다면, 다음 단계로 조용히 넘어가겠습니다.",
+                script: "본격적인 정화의 시간을 갖기 전, 먼저 지금 이 순간으로 당신을 초대합니다.\n편안한 자세로 앉아, 가만히 눈을 감아보세요.\n이제 천천히, 코를 통해 깊게 숨을 들이마십니다. \n내 몸 안으로 맑은 공기가 들어오는 것을 느껴봅니다.\n그리고 입을 통해 천천히, 끝까지 숨을 내쉽니다.\n내쉴 때마다, 어깨의 긴장과 머릿속의 복잡한 생각들이 숨결을 타고 함께 빠져나간다.\n다시 한번 깊게 들이마시고... 길게 내쉽니다.\n외부로 향해 있던 나의 모든 감각과 에너지를, 이제 오롯이 내 안으로 거두어들입니다. \n당신은 지금 완벽하게 안전하며, 이 시간은 오직 당신 내면의 평화를 위한 시간입니다. \n준비가 되었다면, 다음 단계로 조용히 넘어가겠습니다.",
                 audioSrc: "audio/step0.mp3",
                 userRecord: ""
             },
             {
                 indicator: "1단계",
-                title: "투사 거두어들이기",
+                title: "투사 거두어들기",
                 script: "이제 마음의 준비가 되었다면, 지금 당신의 마음을 가장 어지럽히는 그 사람, 혹은 그 상황을 가만히 떠올려 봅니다.\n우리는 흔히 '저 사람 때문에', 혹은 '이 피할 수 없는 상황 때문에' 내가 고통받고 있다고 믿습니다.\n하지만 기적수업은 말합니다. 당신이 느끼는 고통과 두려움의 진짜 원인은 밖에 있지 않다고요.\n밖으로 향하던 시선을 거두어, 내 안으로 가져옵니다.\n'나를 화나게 한 것은 저 상황이 아니라, 저 상황에 대한 내 안의 판단이었구나.'\n이 진실을 외부 탓으로 돌리지 않고, 있는 그대로 가만히 바라보세요.",
                 audioSrc: "audio/step1.mp3",
                 userRecord: ""
@@ -360,6 +522,31 @@
 
         let currentStep = 0;
 
+        // 데이터 관리용 상태 객체 (localStorage 연동)
+        let appData = {
+            users: [],
+            currentUser: "",
+            events: [],
+            currentEvent: "",
+            records: {} 
+        };
+
+        // 로컬 스토리지 데이터 불러오기
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('miracleCleanAppData');
+            if (saved) {
+                try {
+                    appData = JSON.parse(saved);
+                } catch(e) { console.log("데이터 파싱 실패"); }
+            }
+            updateSettingsUI();
+        }
+
+        // 로컬 스토리지 데이터 저장하기
+        function saveToLocalStorage() {
+            localStorage.setItem('miracleCleanAppData', JSON.stringify(appData));
+        }
+
         // DOM 요소 할당
         const stepIndicator = document.getElementById('stepIndicator');
         const stepTitle = document.getElementById('stepTitle');
@@ -377,11 +564,29 @@
         const modalTextarea = document.getElementById('modalTextarea');
         const saveRecordBtn = document.getElementById('saveRecordBtn');
 
+        // 설정 모달
+        const openSettingsBtn = document.getElementById('openSettingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsModalBtn = document.getElementById('closeSettingsModalBtn');
+        
+        const userInput = document.getElementById('userInput');
+        const registerUserBtn = document.getElementById('registerUserBtn');
+        const userSelect = document.getElementById('userSelect');
+        const deleteUserBtn = document.getElementById('deleteUserBtn');
+
+        const eventInput = document.getElementById('eventInput');
+        const addEventBtn = document.getElementById('addEventBtn');
+        const eventSelect = document.getElementById('eventSelect');
+        const editEventBtn = document.getElementById('editEventBtn');
+        const deleteEventBtn = document.getElementById('deleteEventBtn');
+        const loadCloudBtn = document.getElementById('loadCloudBtn');
+
         // 이북 모달
         const ebookModal = document.getElementById('ebookModal');
         const closeEbookModalBtn = document.getElementById('closeEbookModalBtn');
         const ebookChapters = document.getElementById('ebookChapters');
         const ebookDate = document.getElementById('ebookDate');
+        const ebookHeaderTitle = document.getElementById('ebookHeaderTitle');
 
         // UI 업데이트
         function updateUI() {
@@ -403,6 +608,65 @@
 
                 scriptText.style.opacity = 1;
             }, 300);
+        }
+
+        // 현재 선택된 사용자/사건 키 조합 가져오기
+        function getCurrentKey() {
+            if(!appData.currentUser || !appData.currentEvent) return null;
+            return `${appData.currentUser}_${appData.currentEvent}`;
+        }
+
+        // 특정 단계의 현재 기록 불러오기
+        function getCurrentStepRecord() {
+            const key = getCurrentKey();
+            if(key && appData.records[key]) {
+                const found = appData.records[key].find(r => r.stepIndex === currentStep);
+                return found ? found.text : "";
+            }
+            return "";
+        }
+
+        // 특정 단계의 현재 기록 저장하기
+        function saveCurrentStepRecord(text) {
+            const key = getCurrentKey();
+            if(!key) {
+                alert("설정에서 사용자와 사건을 먼저 선택/등록해주세요!");
+                return false;
+            }
+            if(!appData.records[key]) {
+                appData.records[key] = [];
+            }
+            const found = appData.records[key].find(r => r.stepIndex === currentStep);
+            if(found) {
+                found.text = text;
+            } else {
+                appData.records[key].push({ stepIndex: currentStep, text: text });
+            }
+            saveToLocalStorage();
+            return true;
+        }
+
+        // 설정 모달 UI 컴포넌트 갱신
+        function updateSettingsUI() {
+            // 사용자 목록 갱신
+            userSelect.innerHTML = '<option value="">사용자를 선택하세요</option>';
+            appData.users.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u;
+                opt.textContent = u;
+                if(u === appData.currentUser) opt.selected = true;
+                userSelect.appendChild(opt);
+            });
+
+            // 사건 목록 갱신
+            eventSelect.innerHTML = '<option value="">사건을 선택하세요</option>';
+            appData.events.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e;
+                opt.textContent = e;
+                if(e === appData.currentEvent) opt.selected = true;
+                eventSelect.appendChild(opt);
+            });
         }
 
         // 오디오 컨트롤
@@ -450,20 +714,126 @@
 
         window.addEventListener('click', (e) => {
             if (e.target === recordModal) closeModal(recordModal);
+            if (e.target === settingsModal) closeModal(settingsModal);
             if (e.target === ebookModal) closeModal(ebookModal);
         });
 
+        // --- 설정 모달 이벤트 리스너 ---
+        openSettingsBtn.addEventListener('click', () => {
+            updateSettingsUI();
+            openModal(settingsModal);
+        });
+        closeSettingsModalBtn.addEventListener('click', () => closeModal(settingsModal));
+
+        // 사용자 등록
+        registerUserBtn.addEventListener('click', () => {
+            const name = userInput.value.trim();
+            if(!name) return;
+            if(!appData.users.includes(name)) {
+                appData.users.push(name);
+            }
+            appData.currentUser = name;
+            userInput.value = "";
+            saveToLocalStorage();
+            updateSettingsUI();
+            alert(`사용자 '${name}'(이)가 등록 및 선택되었습니다.`);
+        });
+
+        // 사용자 선택 변경
+        userSelect.addEventListener('change', () => {
+            appData.currentUser = userSelect.value;
+            saveToLocalStorage();
+        });
+
+        // 사용자 삭제
+        deleteUserBtn.addEventListener('click', () => {
+            const val = userSelect.value;
+            if(!val) { alert("삭제할 사용자를 선택해주세요."); return; }
+            appData.users = appData.users.filter(u => u !== val);
+            if(appData.currentUser === val) appData.currentUser = "";
+            saveToLocalStorage();
+            updateSettingsUI();
+        });
+
+        // 사건 추가
+        addEventBtn.addEventListener('click', () => {
+            const evt = eventInput.value.trim();
+            if(!evt) return;
+            if(!appData.events.includes(evt)) {
+                appData.events.push(evt);
+            }
+            appData.currentEvent = evt;
+            eventInput.value = "";
+            saveToLocalStorage();
+            updateSettingsUI();
+            alert(`사건 '${evt}'(이)가 추가 및 선택되었습니다.`);
+        });
+
+        // 사건 선택 변경
+        eventSelect.addEventListener('change', () => {
+            appData.currentEvent = eventSelect.value;
+            saveToLocalStorage();
+        });
+
+        // 사건 수정
+        editEventBtn.addEventListener('click', () => {
+            const oldEvt = eventSelect.value;
+            if(!oldEvt) { alert("수정할 사건을 선택해주세요."); return; }
+            const newEvt = prompt("변경할 사건명을 입력하세요:", oldEvt);
+            if(newEvt && newEvt.trim() !== "") {
+                const trimmed = newEvt.trim();
+                const idx = appData.events.indexOf(oldEvt);
+                if(idx !== -1) appData.events[idx] = trimmed;
+                if(appData.currentEvent === oldEvt) appData.currentEvent = trimmed;
+                
+                // 기존 기록 키값도 변경
+                if(appData.currentUser) {
+                    const oldKey = `${appData.currentUser}_${oldEvt}`;
+                    const newKey = `${appData.currentUser}_${trimmed}`;
+                    if(appData.records[oldKey]) {
+                        appData.records[newKey] = appData.records[oldKey];
+                        delete appData.records[oldKey];
+                    }
+                }
+                saveToLocalStorage();
+                updateSettingsUI();
+            }
+        });
+
+        // 사건 삭제
+        deleteEventBtn.addEventListener('click', () => {
+            const val = eventSelect.value;
+            if(!val) { alert("삭제할 사건을 선택해주세요."); return; }
+            appData.events = appData.events.filter(e => e !== val);
+            if(appData.currentEvent === val) appData.currentEvent = "";
+            saveToLocalStorage();
+            updateSettingsUI();
+        });
+
+        // 클라우드에서 불러오기
+        loadCloudBtn.addEventListener('click', () => {
+            loadFromLocalStorage();
+            alert("저장된 데이터를 성공적으로 불러왔습니다!");
+        });
+
+
         // --- 기록하기 로직 ---
         recordBtn.addEventListener('click', () => {
-            modalTitle.textContent = `${steps[currentStep].indicator} 느낌 기록하기`;
-            modalTextarea.value = steps[currentStep].userRecord; 
+            if(!appData.currentUser || !appData.currentEvent) {
+                alert("먼저 하단의 [설정] 버튼을 눌러 사용자 이름과 사건명을 설정해주세요!");
+                openModal(settingsModal);
+                return;
+            }
+            modalTitle.textContent = `${steps[currentStep].indicator} 느낌 기록하기 (${appData.currentUser} / ${appData.currentEvent})`;
+            modalTextarea.value = getCurrentStepRecord(); 
             openModal(recordModal);
         });
 
         closeRecordModalBtn.addEventListener('click', () => closeModal(recordModal));
 
         saveRecordBtn.addEventListener('click', () => {
-            steps[currentStep].userRecord = modalTextarea.value; 
+            const success = saveCurrentStepRecord(modalTextarea.value);
+            if(!success) return;
             
             const originalText = saveRecordBtn.textContent;
             saveRecordBtn.textContent = "저장되었습니다 ✔";
@@ -480,14 +850,25 @@
         closeEbookModalBtn.addEventListener('click', () => closeModal(ebookModal));
 
         function openEbookModal() {
+            if(!appData.currentUser || !appData.currentEvent) {
+                alert("사용자와 사건 정보가 없습니다. 설정을 먼저 확인해주세요.");
+                openModal(settingsModal);
+                return;
+            }
+
+            // 제목 설정
+            ebookHeaderTitle.textContent = `${appData.currentUser}의 내면 정화 일지`;
+            
             // 날짜 세팅
             const today = new Date();
-            ebookDate.textContent = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일의 기록`;
+            ebookDate.textContent = `사건: [${appData.currentEvent}] | 기록일: ${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
 
             // 챕터 생성
             ebookChapters.innerHTML = "";
-            
-            steps.forEach(step => {
+            const key = getCurrentKey();
+            const userRecords = (key && appData.records[key]) ? appData.records[key] : [];
+
+            steps.forEach((step, idx) => {
                 const chapterDiv = document.createElement('div');
                 chapterDiv.className = 'ebook-chapter';
                 
@@ -498,10 +879,11 @@
                 const contentDiv = document.createElement('div');
                 contentDiv.className = 'ebook-chapter-content';
                 
-                if(step.userRecord.trim() === "") {
+                const found = userRecords.find(r => r.stepIndex === idx);
+                if(!found || found.text.trim() === "") {
                     contentDiv.innerHTML = `<span class="empty-record">이 단계에는 작성된 기록이 없습니다.</span>`;
                 } else {
-                    contentDiv.textContent = step.userRecord;
+                    contentDiv.textContent = found.text;
                 }
 
                 chapterDiv.appendChild(titleDiv);
@@ -512,6 +894,8 @@
             openModal(ebookModal);
         }
 
+        // 초기 실행 시 저장소 로드
+        loadFromLocalStorage();
         updateUI();
 
     </script>
