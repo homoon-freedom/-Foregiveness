@@ -14,9 +14,11 @@
             --modal-content-bg: #1e1e1e;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100vw;
+            height: 100vh;
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -24,9 +26,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             overflow: hidden;
             line-height: 1.6;
+            box-sizing: border-box;
         }
 
         .breathe-bg {
@@ -49,43 +51,65 @@
             max-width: 600px;
             width: 90%;
             text-align: center;
-            padding: 40px;
+            padding: 30px;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
-            margin-bottom: 95px; /* 버튼 영역 확보 높이 조정 */
+            margin-bottom: 75px; /* 하단 버튼 영역 확보 */
         }
 
         .step-indicator {
             font-size: 0.9rem;
             color: var(--accent);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 2px;
         }
 
         .title {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
             font-weight: 300;
         }
 
         .script-text {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
             white-space: pre-wrap;
-            margin-bottom: 30px;
-            min-height: 200px;
+            margin-bottom: 20px;
+            min-height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* 하단 고정 컨트롤 바 스타일 (패딩과 위치를 조정하여 위로 살짝 올림) */
+        /* --- 상단 고정 네비게이션 컨트롤 바 --- */
+        .top-controls {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
+            box-sizing: border-box;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- 하단 고정 컨트롤 바 (기록, 설정) --- */
         .controls {
             position: fixed;
-            bottom: 15px; /* 화면 바닥에서 살짝 위로 띄움 */
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
@@ -96,14 +120,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             z-index: 10;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 35px;
             box-sizing: border-box;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            flex-wrap: nowrap;
-            overflow-x: auto;
         }
 
         button {
@@ -379,17 +401,21 @@
 
     <div class="breathe-bg"></div>
 
+    <!-- 상단 고정 컨트롤 바 (이전 단계, 오디오 재생, 다음 단계) -->
+    <div class="top-controls">
+        <button id="prevBtn" disabled>이전 단계</button>
+        <button id="playAudioBtn" class="btn-audio">오디오 재생</button>
+        <button id="nextBtn">다음 단계</button>
+    </div>
+
     <div class="container">
         <div class="step-indicator" id="stepIndicator">0단계</div>
         <h1 class="title" id="stepTitle">고요함 속으로 들어가기</h1>
         <div class="script-text" id="scriptText"></div>
     </div>
 
-    <!-- 하단 고정 컨트롤 바 (이전, 재생, 다음, 기록, 설정 순서의 한 줄 배치) -->
+    <!-- 하단 고정 컨트롤 바 (기록, 설정) -->
     <div class="controls">
-        <button id="prevBtn" disabled>이전</button>
-        <button id="playAudioBtn" class="btn-audio">재생</button>
-        <button id="nextBtn">다음</button>
         <button id="recordBtn">기록</button>
         <button id="openSettingsBtn">설정</button>
     </div>
@@ -516,7 +542,7 @@
             events: [],
             currentEvent: "",
             eventDetails: {}, 
-            records: {}       
+            records: {}        
         };
 
         function loadFromLocalStorage() {
@@ -581,11 +607,11 @@
                 scriptText.textContent = step.script;
 
                 prevBtn.disabled = currentStep === 0;
-                nextBtn.textContent = currentStep === steps.length - 1 ? "요약보기 📖" : "다음";
+                nextBtn.textContent = currentStep === steps.length - 1 ? "요약보기 📖" : "다음 단계";
 
                 audioEl.src = step.audioSrc;
                 audioEl.pause();
-                playAudioBtn.textContent = "재생";
+                playAudioBtn.textContent = "오디오 재생";
 
                 scriptText.style.opacity = 1;
             }, 300);
@@ -653,15 +679,15 @@
         playAudioBtn.addEventListener('click', () => {
             if (audioEl.paused) {
                 audioEl.play().catch(e => console.log("오디오 경로 확인 필요"));
-                playAudioBtn.textContent = "정지";
+                playAudioBtn.textContent = "오디오 정지";
             } else {
                 audioEl.pause();
-                playAudioBtn.textContent = "재생";
+                playAudioBtn.textContent = "오디오 재생";
             }
         });
 
         audioEl.addEventListener('ended', () => {
-            playAudioBtn.textContent = "재생";
+            playAudioBtn.textContent = "오디오 재생";
         });
 
         nextBtn.addEventListener('click', () => {
