@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>기적수업 내면 정화 프로그램</title>
+    <!-- html2canvas 라이브러리 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --bg-color: #121212;
@@ -348,7 +350,7 @@
             margin: 20px 0;
         }
 
-        /* --- 이북(E-Book) 모달 (기타 모달과 일치화) --- */
+        /* --- 이북(E-Book) 모달 --- */
         .ebook-content {
             background-color: var(--modal-content-bg);
             color: var(--text-main);
@@ -363,6 +365,8 @@
             transform: translateY(-20px);
             transition: transform 0.3s ease;
             font-family: inherit; 
+            display: flex;
+            flex-direction: column;
         }
 
         .modal.show .ebook-content { transform: translateY(0); }
@@ -416,6 +420,24 @@
         .empty-record {
             color: var(--text-muted);
             font-style: italic;
+        }
+
+        /* --- 이미지 저장 및 공유 버튼 스타일 --- */
+        .image-share-btn {
+            margin-top: 20px;
+            background-color: #fee500;
+            color: #191919;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        .image-share-btn:hover {
+            background-color: #f3dc00;
+            color: #000;
         }
     </style>
 </head>
@@ -505,7 +527,7 @@
 
     <!-- 이북(요약) 모달 -->
     <div id="ebookModal" class="modal">
-        <div class="ebook-content">
+        <div class="ebook-content" id="ebookPrintArea">
             <span class="close-btn" id="closeEbookModalBtn">&times;</span>
             
             <div class="ebook-title-page">
@@ -513,7 +535,10 @@
                 <p id="ebookDate"></p>
             </div>
 
-            <div id="ebookChapters"></div>
+            <div id="ebookChapters" style="flex: 1; overflow-y: visible;"></div>
+
+            <!-- 이미지 저장 및 공유 버튼 -->
+            <button id="imageShareBtn" class="image-share-btn">🖼️ 일지 이미지로 저장하기</button>
         </div>
     </div>
 
@@ -628,6 +653,8 @@
         const ebookChapters = document.getElementById('ebookChapters');
         const ebookDate = document.getElementById('ebookDate');
         const ebookHeaderTitle = document.getElementById('ebookHeaderTitle');
+        const ebookPrintArea = document.getElementById('ebookPrintArea');
+        const imageShareBtn = document.getElementById('imageShareBtn');
 
         function updateUI() {
             scriptText.style.opacity = 0;
@@ -963,6 +990,37 @@
 
             openModal(ebookModal);
         }
+
+        // 일지 내용을 이미지(PNG)로 캡처하여 저장 및 공유 기능
+        imageShareBtn.addEventListener('click', () => {
+            // 캡처 시 X 버튼 숨기기
+            const closeBtn = ebookPrintArea.querySelector('.close-btn');
+            const shareBtn = ebookPrintArea.querySelector('.image-share-btn');
+            closeBtn.style.display = 'none';
+            shareBtn.style.display = 'none';
+
+            // html2canvas 실행
+            html2canvas(ebookPrintArea, {
+                backgroundColor: "#1e1e1e",
+                scale: 2 // 화질 선명하게 설정
+            }).then(canvas => {
+                // 버튼 및 닫기 버튼 복원
+                closeBtn.style.display = 'block';
+                shareBtn.style.display = 'block';
+
+                // 이미지 파일 다운로드 링크 생성
+                const link = document.createElement('a');
+                link.download = `${appData.currentUser}_내면정화일지.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                alert("일지 이미지가 성공적으로 저장되었습니다!\n저장된 이미지를 카카오톡으로 공유해 보세요.");
+            }).catch(err => {
+                closeBtn.style.display = 'block';
+                shareBtn.style.display = 'block';
+                alert("이미지 생성 중 오류가 발생했습니다.");
+            });
+        });
 
         loadFromLocalStorage();
         updateUI();
