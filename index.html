@@ -21,7 +21,8 @@
             height: 100vh;
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -56,24 +57,25 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
-            margin-bottom: 75px; /* 하단 버튼 영역 확보 */
+            margin-bottom: 75px;
         }
 
         .step-indicator {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--accent);
             margin-bottom: 8px;
             letter-spacing: 2px;
+            font-weight: 600;
         }
 
         .title {
             font-size: 1.6rem;
             margin-bottom: 20px;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         .script-text {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
             white-space: pre-wrap;
             margin-bottom: 20px;
@@ -82,9 +84,9 @@
             align-items: center;
             justify-content: center;
             transition: opacity 0.5s ease-in-out;
+            word-break: keep-all;
         }
 
-        /* --- 상단 고정 네비게이션 컨트롤 바 --- */
         .top-controls {
             position: fixed;
             top: 15px;
@@ -106,7 +108,6 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
 
-        /* --- 하단 고정 컨트롤 바 (기록, 설정) --- */
         .controls {
             position: fixed;
             bottom: 15px;
@@ -134,7 +135,8 @@
             border: 1px solid var(--accent);
             padding: 8px 14px;
             border-radius: 10px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-family: inherit;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
@@ -162,7 +164,6 @@
             color: white;
         }
 
-        /* --- 공통 모달 스타일 --- */
         .modal {
             display: none; 
             position: fixed;
@@ -194,7 +195,6 @@
             z-index: 10;
         }
 
-        /* --- 기록하기 모달 --- */
         .record-content {
             background-color: var(--modal-content-bg);
             padding: 30px;
@@ -213,10 +213,11 @@
 
         .record-content h2 {
             margin-top: 0;
-            font-size: 1.4rem;
-            font-weight: 300;
+            font-size: 1.3rem;
+            font-weight: 500;
             color: var(--accent);
             margin-bottom: 15px;
+            word-break: keep-all;
         }
 
         textarea {
@@ -244,7 +245,6 @@
             padding: 12px;
         }
 
-        /* --- 설정 모달 스타일 --- */
         .settings-content {
             background-color: #1e1e1e;
             color: #e0e0e0;
@@ -302,6 +302,7 @@
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 0.95rem;
+            font-family: inherit;
         }
 
         .settings-content select {
@@ -313,13 +314,13 @@
             padding-right: 35px;
         }
 
-        .btn-blue { background-color: #007bff; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-blue { background-color: #007bff; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; font-family: inherit; }
         .btn-blue:hover { background-color: #0056b3; }
 
-        .btn-red { background-color: #ff3b30; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-red { background-color: #ff3b30; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; font-family: inherit; }
         .btn-red:hover { background-color: #d32f2f; }
 
-        .btn-orange { background-color: #ff9500; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; }
+        .btn-orange { background-color: #ff9500; color: white; border: none; border-radius: 8px; padding: 0 16px; cursor: pointer; font-weight: 500; font-family: inherit; }
         .btn-orange:hover { background-color: #e08500; }
 
         .divider {
@@ -328,38 +329,37 @@
             margin: 20px 0;
         }
 
-        /* --- 이북(E-Book) 모달 --- */
         .ebook-content {
             background-color: #fdf6e3;
             color: #333;
-            padding: 50px 40px;
+            padding: 40px 30px;
             width: 90%;
             max-width: 650px;
             height: 80vh;
-            border-radius: 4px 12px 12px 4px;
-            box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.6);
+            border-radius: 8px;
+            box-shadow: inset 10px 0 15px rgba(0,0,0,0.03), 0 10px 40px rgba(0,0,0,0.6);
             position: relative;
             overflow-y: auto;
             transform: scale(0.95);
             transition: transform 0.3s ease;
-            font-family: 'Batang', 'Noto Serif KR', 'KoPub Batang', serif; 
+            font-family: "Nanum Myeongjo", "Apple Myungjo", "Batang", serif; 
         }
 
         .modal.show .ebook-content { transform: scale(1); }
-        .ebook-content .close-btn { color: #888; font-family: sans-serif; }
+        .ebook-content .close-btn { color: #888; font-family: -apple-system, sans-serif; }
         .ebook-content .close-btn:hover { color: #333; }
 
         .ebook-title-page {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             border-bottom: 1px solid #d4cbb3;
             padding-bottom: 20px;
         }
 
         .ebook-title-page h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin: 0 0 10px 0;
-            font-weight: 600;
+            font-weight: 700;
             color: #2c2c2c;
         }
 
@@ -367,10 +367,11 @@
             color: #777;
             font-size: 0.9rem;
             margin: 0;
+            line-height: 1.5;
         }
 
         .ebook-chapter {
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .ebook-chapter-title {
@@ -385,14 +386,15 @@
             line-height: 1.8;
             white-space: pre-wrap;
             color: #2c2c2c;
-            background: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.6);
             padding: 20px;
-            border-radius: 4px;
-            border-left: 3px solid #d4cbb3;
+            border-radius: 6px;
+            border-left: 3px solid #4a6fa5;
+            word-break: keep-all;
         }
 
         .empty-record {
-            color: #a0a0a0;
+            color: #888;
             font-style: italic;
         }
     </style>
@@ -401,7 +403,6 @@
 
     <div class="breathe-bg"></div>
 
-    <!-- 상단 고정 컨트롤 바 (이전 단계, 오디오 재생, 다음 단계) -->
     <div class="top-controls">
         <button id="prevBtn" disabled>이전 단계</button>
         <button id="playAudioBtn" class="btn-audio">오디오 재생</button>
@@ -414,16 +415,13 @@
         <div class="script-text" id="scriptText"></div>
     </div>
 
-    <!-- 하단 고정 컨트롤 바 (기록, 설정) -->
     <div class="controls">
         <button id="recordBtn">현재 느낌 기록</button>
         <button id="openSettingsBtn">사용자 및 사건 설정</button>
     </div>
 
-    <!-- 오디오 요소 -->
     <audio id="stepAudio"></audio>
 
-    <!-- 기록하기 모달 -->
     <div id="recordModal" class="modal">
         <div class="record-content">
             <span class="close-btn" id="closeRecordModalBtn">&times;</span>
@@ -433,7 +431,6 @@
         </div>
     </div>
 
-    <!-- 설정 모달 -->
     <div id="settingsModal" class="modal">
         <div class="settings-content">
             <span class="close-btn" id="closeSettingsModalBtn">&times;</span>
@@ -441,7 +438,6 @@
                 <h2>⚙️ 설정</h2>
             </div>
 
-            <!-- 1. 사용자 -->
             <div class="setting-group">
                 <label>1. 사용자</label>
                 <div class="input-row">
@@ -458,7 +454,6 @@
 
             <hr class="divider">
 
-            <!-- 2. 사건 -->
             <div class="setting-group">
                 <label>2. 사건</label>
                 <div class="input-row">
@@ -476,7 +471,6 @@
 
             <hr class="divider">
 
-            <!-- 3. 사건 내용 입력 -->
             <div class="setting-group" style="margin-bottom: 0;">
                 <label>3. 사건 내용 입력</label>
                 <textarea id="eventDetailTextarea" placeholder="선택된 사건에 대한 구체적인 내용을 입력하세요..." style="width: 100%; height: 100px; resize: none; box-sizing: border-box;"></textarea>
@@ -484,7 +478,6 @@
         </div>
     </div>
 
-    <!-- 이북(요약) 모달 -->
     <div id="ebookModal" class="modal">
         <div class="ebook-content">
             <span class="close-btn" id="closeEbookModalBtn">&times;</span>
@@ -494,9 +487,7 @@
                 <p id="ebookDate"></p>
             </div>
 
-            <div id="ebookChapters">
-                <!-- 자바스크립트로 챕터(단계별 기록)가 여기에 삽입됩니다 -->
-            </div>
+            <div id="ebookChapters"></div>
         </div>
     </div>
 
@@ -535,22 +526,41 @@
         ];
 
         let currentStep = 0;
-
-        let appData = {
-            users: [],
-            currentUser: "",
-            events: [],
-            currentEvent: "",
-            eventDetails: {}, 
-            records: {}        
+        
+        // 데이터 구조 변경: 사용자별 사건 및 내용 관리 분리
+        let appData = { 
+            users: [], 
+            currentUser: "", 
+            userEvents: {},       // { username: [사건명1, 사건명2, ...] }
+            currentEvents: {},    // { username: 현재선택된사건명 }
+            userEventDetails: {}, // { username: { 사건명: 상세내용 } }
+            records: {}           // { "사용자_사건": [{stepIndex, text}] }
         };
 
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('miracleCleanAppData');
             if (saved) {
-                try {
-                    appData = JSON.parse(saved);
-                } catch(e) { console.log("데이터 파싱 실패"); }
+                try { 
+                    const parsed = JSON.parse(saved);
+                    // 기존 데이터 마이그레이션 호환 처리
+                    appData.users = parsed.users || [];
+                    appData.currentUser = parsed.currentUser || "";
+                    appData.userEvents = parsed.userEvents || {};
+                    appData.currentEvents = parsed.currentEvents || {};
+                    appData.userEventDetails = parsed.userEventDetails || {};
+                    appData.records = parsed.records || {};
+
+                    // 구버전 구조(events, currentEvent, eventDetails)가 남아있을 경우 대응
+                    if (parsed.events && !appData.userEvents[appData.currentUser]) {
+                        appData.userEvents[appData.currentUser] = parsed.events;
+                    }
+                    if (parsed.currentEvent && !appData.currentEvents[appData.currentUser]) {
+                        appData.currentEvents[appData.currentUser] = parsed.currentEvent;
+                    }
+                    if (parsed.eventDetails && !appData.userEventDetails[appData.currentUser]) {
+                        appData.userEventDetails[appData.currentUser] = parsed.eventDetails;
+                    }
+                } catch(e) {}
             }
             updateSettingsUI();
         }
@@ -598,10 +608,8 @@
 
         function updateUI() {
             scriptText.style.opacity = 0;
-            
             setTimeout(() => {
                 const step = steps[currentStep];
-                
                 stepIndicator.textContent = step.indicator;
                 stepTitle.textContent = step.title;
                 scriptText.textContent = step.script;
@@ -612,14 +620,19 @@
                 audioEl.src = step.audioSrc;
                 audioEl.pause();
                 playAudioBtn.textContent = "오디오 재생";
-
                 scriptText.style.opacity = 1;
             }, 300);
         }
 
+        function getCurrentEvent() {
+            if (!appData.currentUser) return "";
+            return appData.currentEvents[appData.currentUser] || "";
+        }
+
         function getCurrentKey() {
-            if(!appData.currentUser || !appData.currentEvent) return null;
-            return `${appData.currentUser}_${appData.currentEvent}`;
+            const curEvt = getCurrentEvent();
+            if(!appData.currentUser || !curEvt) return null;
+            return `${appData.currentUser}_${curEvt}`;
         }
 
         function getCurrentStepRecord() {
@@ -637,9 +650,7 @@
                 alert("설정에서 사용자와 사건을 먼저 선택/등록해주세요!");
                 return false;
             }
-            if(!appData.records[key]) {
-                appData.records[key] = [];
-            }
+            if(!appData.records[key]) appData.records[key] = [];
             const found = appData.records[key].find(r => r.stepIndex === currentStep);
             if(found) {
                 found.text = text;
@@ -651,6 +662,7 @@
         }
 
         function updateSettingsUI() {
+            // 사용자 목록 갱신
             userSelect.innerHTML = '<option value="">사용자를 선택하세요</option>';
             appData.users.forEach(u => {
                 const opt = document.createElement('option');
@@ -660,17 +672,21 @@
                 userSelect.appendChild(opt);
             });
 
+            // 현재 선택된 사용자의 사건 목록 및 상세 내용 불러오기
             eventSelect.innerHTML = '<option value="">사건을 선택하세요</option>';
-            appData.events.forEach(e => {
+            const userEvts = (appData.currentUser && appData.userEvents[appData.currentUser]) ? appData.userEvents[appData.currentUser] : [];
+            const curEvt = getCurrentEvent();
+
+            userEvts.forEach(e => {
                 const opt = document.createElement('option');
                 opt.value = e;
                 opt.textContent = e;
-                if(e === appData.currentEvent) opt.selected = true;
+                if(e === curEvt) opt.selected = true;
                 eventSelect.appendChild(opt);
             });
 
-            if (appData.currentEvent && appData.eventDetails) {
-                eventDetailTextarea.value = appData.eventDetails[appData.currentEvent] || "";
+            if (appData.currentUser && curEvt && appData.userEventDetails[appData.currentUser]) {
+                eventDetailTextarea.value = appData.userEventDetails[appData.currentUser][curEvt] || "";
             } else {
                 eventDetailTextarea.value = "";
             }
@@ -686,9 +702,7 @@
             }
         });
 
-        audioEl.addEventListener('ended', () => {
-            playAudioBtn.textContent = "오디오 재생";
-        });
+        audioEl.addEventListener('ended', () => { playAudioBtn.textContent = "오디오 재생"; });
 
         nextBtn.addEventListener('click', () => {
             if (currentStep < steps.length - 1) {
@@ -723,7 +737,7 @@
         });
 
         openSettingsBtn.addEventListener('click', () => {
-            loadFromLocalStorage(); 
+            loadFromLocalStorage();
             updateSettingsUI();
             openModal(settingsModal);
         });
@@ -743,7 +757,6 @@
         });
 
         userSelect.addEventListener('change', () => {
-            loadFromLocalStorage();
             appData.currentUser = userSelect.value;
             saveToLocalStorage();
             updateSettingsUI();
@@ -753,84 +766,115 @@
             const val = userSelect.value;
             if(!val) { alert("삭제할 사용자를 선택해주세요."); return; }
             appData.users = appData.users.filter(u => u !== val);
-            if(appData.currentUser === val) appData.currentUser = "";
+            delete appData.userEvents[val];
+            delete appData.currentEvents[val];
+            delete appData.userEventDetails[val];
+            
+            if(appData.currentUser === val) {
+                appData.currentUser = "";
+            }
             saveToLocalStorage();
             updateSettingsUI();
         });
 
         addEventBtn.addEventListener('click', () => {
+            if(!appData.currentUser) {
+                alert("먼저 사용자를 선택하거나 등록해주세요!");
+                return;
+            }
             const evt = eventInput.value.trim();
             if(!evt) return;
-            if(!appData.events.includes(evt)) {
-                appData.events.push(evt);
+
+            if(!appData.userEvents[appData.currentUser]) {
+                appData.userEvents[appData.currentUser] = [];
             }
-            appData.currentEvent = evt;
+            if(!appData.userEvents[appData.currentUser].includes(evt)) {
+                appData.userEvents[appData.currentUser].push(evt);
+            }
+            appData.currentEvents[appData.currentUser] = evt;
             eventInput.value = "";
-            if(!appData.eventDetails) appData.eventDetails = {};
-            appData.eventDetails[evt] = "";
+
+            if(!appData.userEventDetails[appData.currentUser]) {
+                appData.userEventDetails[appData.currentUser] = {};
+            }
+            appData.userEventDetails[appData.currentUser][evt] = "";
+
             saveToLocalStorage();
             updateSettingsUI();
             alert(`사건 '${evt}'(이)가 추가 및 선택되었습니다.`);
         });
 
         eventSelect.addEventListener('change', () => {
-            loadFromLocalStorage();
-            appData.currentEvent = eventSelect.value;
-            saveToLocalStorage();
-            updateSettingsUI();
+            if(appData.currentUser) {
+                appData.currentEvents[appData.currentUser] = eventSelect.value;
+                saveToLocalStorage();
+                updateSettingsUI();
+            }
         });
 
         editEventBtn.addEventListener('click', () => {
-            const oldEvt = eventSelect.value;
+            if(!appData.currentUser) return;
+            const oldEvt = getCurrentEvent();
             if(!oldEvt) { alert("수정할 사건을 선택해주세요."); return; }
             const newEvt = prompt("변경할 사건명을 입력하세요:", oldEvt);
             if(newEvt && newEvt.trim() !== "") {
                 const trimmed = newEvt.trim();
-                const idx = appData.events.indexOf(oldEvt);
-                if(idx !== -1) appData.events[idx] = trimmed;
-                if(appData.currentEvent === oldEvt) appData.currentEvent = trimmed;
+                const userEvts = appData.userEvents[appData.currentUser] || [];
+                const idx = userEvts.indexOf(oldEvt);
+                if(idx !== -1) userEvts[idx] = trimmed;
+                appData.currentEvents[appData.currentUser] = trimmed;
                 
-                if(appData.eventDetails && appData.eventDetails[oldEvt] !== undefined) {
-                    appData.eventDetails[trimmed] = appData.eventDetails[oldEvt];
-                    delete appData.eventDetails[oldEvt];
+                if(appData.userEventDetails[appData.currentUser] && appData.userEventDetails[appData.currentUser][oldEvt] !== undefined) {
+                    appData.userEventDetails[appData.currentUser][trimmed] = appData.userEventDetails[appData.currentUser][oldEvt];
+                    delete appData.userEventDetails[appData.currentUser][oldEvt];
                 }
 
-                if(appData.currentUser) {
-                    const oldKey = `${appData.currentUser}_${oldEvt}`;
-                    const newKey = `${appData.currentUser}_${trimmed}`;
-                    if(appData.records[oldKey]) {
-                        appData.records[newKey] = appData.records[oldKey];
-                        delete appData.records[oldKey];
-                    }
+                const oldKey = `${appData.currentUser}_${oldEvt}`;
+                const newKey = `${appData.currentUser}_${trimmed}`;
+                if(appData.records[oldKey]) {
+                    appData.records[newKey] = appData.records[oldKey];
+                    delete appData.records[oldKey];
                 }
+
                 saveToLocalStorage();
                 updateSettingsUI();
             }
         });
 
         deleteEventBtn.addEventListener('click', () => {
-            const val = eventSelect.value;
+            if(!appData.currentUser) return;
+            const val = getCurrentEvent();
             if(!val) { alert("삭제할 사건을 선택해주세요."); return; }
-            appData.events = appData.events.filter(e => e !== val);
-            if(appData.currentEvent === val) appData.currentEvent = "";
+            
+            appData.userEvents[appData.currentUser] = (appData.userEvents[appData.currentUser] || []).filter(e => e !== val);
+            appData.currentEvents[appData.currentUser] = "";
+            if(appData.userEventDetails[appData.currentUser]) {
+                delete appData.userEventDetails[appData.currentUser][val];
+            }
+
             saveToLocalStorage();
             updateSettingsUI();
         });
 
         eventDetailTextarea.addEventListener('input', () => {
-            if(!appData.currentEvent) return;
-            if(!appData.eventDetails) appData.eventDetails = {};
-            appData.eventDetails[appData.currentEvent] = eventDetailTextarea.value;
+            if(!appData.currentUser) return;
+            const curEvt = getCurrentEvent();
+            if(!curEvt) return;
+            if(!appData.userEventDetails[appData.currentUser]) {
+                appData.userEventDetails[appData.currentUser] = {};
+            }
+            appData.userEventDetails[appData.currentUser][curEvt] = eventDetailTextarea.value;
             saveToLocalStorage();
         });
 
         recordBtn.addEventListener('click', () => {
-            if(!appData.currentUser || !appData.currentEvent) {
+            const curEvt = getCurrentEvent();
+            if(!appData.currentUser || !curEvt) {
                 alert("먼저 하단의 [설정] 버튼을 눌러 사용자 이름과 사건명을 설정해주세요!");
                 openModal(settingsModal);
                 return;
             }
-            modalTitle.textContent = `${steps[currentStep].indicator} 느낌 기록하기 (${appData.currentUser} / ${appData.currentEvent})`;
+            modalTitle.textContent = `${steps[currentStep].indicator} 느낌 기록하기 (${appData.currentUser} / ${curEvt})`;
             modalTextarea.value = getCurrentStepRecord(); 
             openModal(recordModal);
         });
@@ -855,7 +899,8 @@
         closeEbookModalBtn.addEventListener('click', () => closeModal(ebookModal));
 
         function openEbookModal() {
-            if(!appData.currentUser || !appData.currentEvent) {
+            const curEvt = getCurrentEvent();
+            if(!appData.currentUser || !curEvt) {
                 alert("사용자와 사건 정보가 없습니다. 설정을 먼저 확인해주세요.");
                 openModal(settingsModal);
                 return;
@@ -864,8 +909,9 @@
             ebookHeaderTitle.textContent = `${appData.currentUser}의 내면 정화 일지`;
             
             const today = new Date();
-            const eventDesc = (appData.eventDetails && appData.eventDetails[appData.currentEvent]) ? appData.eventDetails[appData.currentEvent] : "내용 없음";
-            ebookDate.innerHTML = `사건: [${appData.currentEvent}]<br>사건 내용: ${eventDesc}<br>기록일: ${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+            const detailsMap = appData.userEventDetails[appData.currentUser] || {};
+            const eventDesc = detailsMap[curEvt] ? detailsMap[curEvt] : "내용 없음";
+            ebookDate.innerHTML = `사건: [${curEvt}]<br>사건 내용: ${eventDesc}<br>기록일: ${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
 
             ebookChapters.innerHTML = "";
             const key = getCurrentKey();
@@ -899,7 +945,6 @@
 
         loadFromLocalStorage();
         updateUI();
-
     </script>
 </body>
 </html>
