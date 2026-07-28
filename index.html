@@ -54,7 +54,7 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
-            margin-bottom: 80px; /* 하단 고정 버튼 영역 확보 */
+            margin-bottom: 95px; /* 버튼 영역 확보 높이 조정 */
         }
 
         .step-indicator {
@@ -71,7 +71,7 @@
         }
 
         .script-text {
-            font-size: 1.1rem; /* 폰트 크기를 원래 크기(1.1rem)로 한 단계 올림 */
+            font-size: 1.1rem;
             color: var(--text-muted);
             white-space: pre-wrap;
             margin-bottom: 30px;
@@ -82,22 +82,26 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* 하단 고정 컨트롤 바 스타일 (버튼 한 줄 배치) */
+        /* 하단 고정 컨트롤 바 스타일 (패딩과 위치를 조정하여 위로 살짝 올림) */
         .controls {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(18, 18, 18, 0.85);
+            bottom: 15px; /* 화면 바닥에서 살짝 위로 띄움 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(18, 18, 18, 0.9);
             backdrop-filter: blur(10px);
-            padding: 15px 10px;
+            padding: 12px 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
             z-index: 10;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
             box-sizing: border-box;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
             flex-wrap: nowrap;
             overflow-x: auto;
         }
