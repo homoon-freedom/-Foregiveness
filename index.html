@@ -20,7 +20,7 @@
             margin: 0;
             padding: 0;
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", Roboto, sans-serif;
@@ -29,13 +29,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             line-height: 1.6;
             box-sizing: border-box;
+            /* 작은 화면에서도 스크롤이 가능하도록 수정 */
+            overflow-x: hidden;
+            overflow-y: auto; 
         }
 
         .breathe-bg {
-            position: absolute;
+            position: fixed; /* 배경 고정 */
+            top: 0; left: 0;
             width: 100vw;
             height: 100vh;
             background: radial-gradient(circle, rgba(74,111,165,0.15) 0%, rgba(18,18,18,1) 60%);
@@ -59,7 +62,9 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
-            margin-bottom: 75px;
+            /* 상하단 고정 버튼 영역 확보 */
+            margin-top: 90px;
+            margin-bottom: 90px; 
         }
 
         .step-indicator {
@@ -74,6 +79,32 @@
             font-size: 1.6rem;
             margin-bottom: 20px;
             font-weight: 400;
+        }
+
+        /* --- 사건 정보 표시 영역 --- */
+        .event-info {
+            display: none; /* 설정값이 있을 때만 보임 */
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .event-title-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .event-detail-display {
+            font-size: 0.95rem;
+            color: #bbb;
+            white-space: pre-wrap;
+            word-break: keep-all;
         }
 
         .script-text {
@@ -97,7 +128,7 @@
             transform: translateX(-50%);
             width: 90%;
             max-width: 600px;
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(18, 18, 18, 0.95);
             backdrop-filter: blur(10px);
             padding: 10px 15px;
             display: flex;
@@ -108,7 +139,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             box-sizing: border-box;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
         }
 
         #prevBtn, #nextBtn {
@@ -137,7 +168,7 @@
             transform: translateX(-50%);
             width: 90%;
             max-width: 600px;
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(18, 18, 18, 0.95);
             backdrop-filter: blur(10px);
             padding: 12px 15px;
             display: flex;
@@ -148,7 +179,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             box-sizing: border-box;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
         }
 
         .controls button {
@@ -445,7 +476,7 @@
 
     <div class="breathe-bg"></div>
 
-    <!-- 상단 고정 컨트롤 바 (이전 단계, 오디오 재생, 다음 단계) -->
+    <!-- 상단 고정 컨트롤 바 -->
     <div class="top-controls">
         <button id="prevBtn" disabled>이전 단계</button>
         <button id="playAudioBtn" class="btn-audio">오디오 재생</button>
@@ -455,10 +486,17 @@
     <div class="container">
         <div class="step-indicator" id="stepIndicator">0단계</div>
         <h1 class="title" id="stepTitle">고요함 속으로 들어가기</h1>
+        
+        <!-- 사건 정보 표시 영역 (추가됨) -->
+        <div class="event-info" id="eventInfo">
+            <div class="event-title-display" id="displayEventTitle"></div>
+            <div class="event-detail-display" id="displayEventDetail"></div>
+        </div>
+
         <div class="script-text" id="scriptText"></div>
     </div>
 
-    <!-- 하단 고정 컨트롤 바 (기록, 설정) -->
+    <!-- 하단 고정 컨트롤 바 -->
     <div class="controls">
         <button id="recordBtn">현재 느낌 기록</button>
         <button id="openSettingsBtn">사용자 및 사건 설정</button>
@@ -598,16 +636,6 @@
                     appData.currentEvents = parsed.currentEvents || {};
                     appData.userEventDetails = parsed.userEventDetails || {};
                     appData.records = parsed.records || {};
-
-                    if (parsed.events && !appData.userEvents[appData.currentUser]) {
-                        appData.userEvents[appData.currentUser] = parsed.events;
-                    }
-                    if (parsed.currentEvent && !appData.currentEvents[appData.currentUser]) {
-                        appData.currentEvents[appData.currentUser] = parsed.currentEvent;
-                    }
-                    if (parsed.eventDetails && !appData.userEventDetails[appData.currentUser]) {
-                        appData.userEventDetails[appData.currentUser] = parsed.eventDetails;
-                    }
                 } catch(e) {}
             }
             updateSettingsUI();
@@ -620,6 +648,12 @@
         const stepIndicator = document.getElementById('stepIndicator');
         const stepTitle = document.getElementById('stepTitle');
         const scriptText = document.getElementById('scriptText');
+        
+        // 추가된 이벤트 정보 영역
+        const eventInfo = document.getElementById('eventInfo');
+        const displayEventTitle = document.getElementById('displayEventTitle');
+        const displayEventDetail = document.getElementById('displayEventDetail');
+
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const audioEl = document.getElementById('stepAudio');
@@ -658,11 +692,26 @@
 
         function updateUI() {
             scriptText.style.opacity = 0;
+            eventInfo.style.opacity = 0;
+            
             setTimeout(() => {
                 const step = steps[currentStep];
                 stepIndicator.textContent = step.indicator;
                 stepTitle.textContent = step.title;
                 scriptText.textContent = step.script;
+
+                // 현재 설정된 사건 정보 반영
+                const curEvt = getCurrentEvent();
+                const curEvtDetail = (appData.currentUser && appData.userEventDetails[appData.currentUser] && appData.userEventDetails[appData.currentUser][curEvt]) 
+                                        ? appData.userEventDetails[appData.currentUser][curEvt] : "";
+                
+                if(appData.currentUser && curEvt) {
+                    displayEventTitle.textContent = `[${curEvt}]`;
+                    displayEventDetail.textContent = curEvtDetail;
+                    eventInfo.style.display = "block";
+                } else {
+                    eventInfo.style.display = "none";
+                }
 
                 prevBtn.disabled = currentStep === 0;
                 nextBtn.textContent = currentStep === steps.length - 1 ? "요약보기 📖" : "다음 단계";
@@ -670,7 +719,9 @@
                 audioEl.src = step.audioSrc;
                 audioEl.pause();
                 playAudioBtn.textContent = "오디오 재생";
+                
                 scriptText.style.opacity = 1;
+                eventInfo.style.opacity = 1;
             }, 300);
         }
 
@@ -780,7 +831,10 @@
 
         window.addEventListener('click', (e) => {
             if (e.target === recordModal) closeModal(recordModal);
-            if (e.target === settingsModal) closeModal(settingsModal);
+            if (e.target === settingsModal) {
+                closeModal(settingsModal);
+                updateUI(); // 설정 모달 밖을 클릭해 닫을 때 메인 UI 반영
+            }
             if (e.target === ebookModal) closeModal(ebookModal);
         });
 
@@ -789,7 +843,12 @@
             updateSettingsUI();
             openModal(settingsModal);
         });
-        closeSettingsModalBtn.addEventListener('click', () => closeModal(settingsModal));
+        
+        // 설정창 닫을 때 메인 화면에 사건 정보 업데이트 반영
+        closeSettingsModalBtn.addEventListener('click', () => {
+            closeModal(settingsModal);
+            updateUI();
+        });
 
         registerUserBtn.addEventListener('click', () => {
             const name = userInput.value.trim();
@@ -1008,7 +1067,6 @@
                 canvas.toBlob(blob => {
                     const file = new File([blob], `${appData.currentUser}_내면정화일지.png`, { type: 'image/png' });
 
-                    // Web Share API 지원 여부 확인 (모바일 카카오톡 등에서 이미지 바로 공유 가능)
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         navigator.share({
                             files: [file],
@@ -1018,7 +1076,6 @@
                             console.log('공유 취소 또는 실패', error);
                         });
                     } else {
-                        // 미지원 환경(PC 등)일 경우 파일 다운로드로 대체
                         const link = document.createElement('a');
                         link.download = `${appData.currentUser}_내면정화일지.png`;
                         link.href = canvas.toDataURL('image/png');
